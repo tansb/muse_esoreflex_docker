@@ -89,7 +89,7 @@ GetPipelinesToInstall()
   # Clear existing pipelines_to_install file
   \rm -f pipelines_to_install
 
-  # Add MUSE pipeline (assuming PipeID 15 corresponds to MUSE)
+  # Add MUSE pipeline (assuming PipeID 16 corresponds to MUSE)
   awk '{if (NR == 16) printf("%s   %s\n", $1, $2)}' "${download_dir}/available_pipelines" > pipelines_to_install
 
   if [ -s pipelines_to_install ]; then
