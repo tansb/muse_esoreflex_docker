@@ -76,8 +76,9 @@ GetInstalledReflex()
   fi
 }
 
-#This function will show the available pipelines and their versions and
-#will prompt for the desired pipelines to be installed
+#tans: This function would NORMALLY show the available pipelines and their versions and
+# prompt for the desired pipelines to be installed. However I've modifed it to not prompt
+# and just install the MUSE pipeline.
 GetPipelinesToInstall()
 {
   cd "${tempdir}"
