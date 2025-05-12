@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-and-run:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     env:
       MY_MOUNTED_DATA_DIR: /tmp
