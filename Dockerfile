@@ -54,7 +54,7 @@ RUN INSTALL_DIR=${HOME}/pipelines/reflex/$(date +%Y-%m-%d) && \
     && bash install_esoreflex_muse_only.sh \
     && echo '#' >> ~/.bashrc \
     && echo '# tbar: add an alias so can just type $esoreflex to begin the program'  >> ~/.bashrc \
-    && echo 'alias esoreflex="/root/pipelines/reflex/2025-01-07/install/bin/esoreflex"' >> ~/.bashrc
+    && echo 'alias esoreflex="/root/pipelines/reflex/*/install/bin/esoreflex"' >> ~/.bashrc
 
 # Set the default shell to bash
 CMD ["/bin/bash"]
