@@ -1,0 +1,23 @@
+services:
+    esoreflex_muse:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: tansb/esoreflex_muse
+        container_name: esoreflex_muse_container
+        environment:
+            # Sets the `DISPLAY` variable for the container to use the XQuartz
+            # display on macOS.
+            - DISPLAY=host.docker.internal:0
+
+        volumes:
+            # Mounts your data directory to be accessible inside the container.
+            - ${MY_MOUNTED_DATA_DIR}:/mnt
+            # Mounts the X11 socket from the host to the container.
+            - /tmp/.X11-unix:/tmp/.X11-unix
+        # "stdin_open: true" and "tty: true" replicates the -it (interactive)
+        # flags.
+        stdin_open: true
+        tty: true
+        entrypoint: []
+        command: ["/bin/bash"]
