@@ -1,0 +1,36 @@
+name: Build and run ESO MUSE container
+on:
+  # Triggers on every push or pull request to main.
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+
+    env:
+      MY_MOUNTED_DATA_DIR: /tmp
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    # Build the image using Docker Compose
+    - name: Build Containers
+      run: docker compose build
+
+    # Run the container in detached mode
+    - name: Run container (test it starts)
+      run: docker compose up -d
+
+    # Wait 10 seconds, checks that the container is up, and then stops it.
+    - name: Wait briefly then shut down
+      run: |
+        sleep 10
+        docker compose ps
+        docker compose down
