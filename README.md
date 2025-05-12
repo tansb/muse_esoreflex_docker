@@ -28,11 +28,26 @@ Esoreflex is a GUI, so you need some way to forward the display from the contain
 
 -   Also, on your mac run the command `$ xhost +` to allow the Docker container to connect to any X11 server.
 
-## 3. Enter the Docker Container
+## 3. Run the Docker container
 
-```docker exec -it esoreflex_muse_container bash```
+When starting up the container, you need to share the X11 socket and set the DISPLAY environment variable explicitly. Therefore need to run the following command:
 
-Test that the X11 forwarding is working correctly by typing ```xclock``` into the container terminal. A little clock should open in XQuartz. If not, not sure try step 2 again?
+``` bash
+docker run -it \
+  -e DISPLAY=host.docker.internal:0 \
+  -v /tmp/.X11-unix:/tmp/.X11-unix \
+  tbar/esoreflex_muse:v4
+```
+
+-   `-it` : is to run the container in an interactive terminal
+
+-   `-e DISPLAY=host.docker.internal:0`: Sets the `DISPLAY` variable for the container to use the XQuartz display on macOS.
+
+-   `-v /tmp/.X11-unix:/tmp/.X11-unix`: Mounts the X11 socket from the host to the container.
+
+-   The last line specifies the image name we want to open a container for.
+
+Test that the X11 forwarding is working correctly by typing `xclock` into the container terminal. A little clock should open in XQuartz. If not, not sure try step 2 again?
 
 ## 4. Run ESOReflex
 
@@ -42,7 +57,7 @@ In the container terminal type `esoreflex` and voila! The Kepler GUI should open
 
 ## A. Modified install_esoreflex file
 
-How did I modify the install_esoreflex to not prompt for which pipelines to install and just install the MUSE pipeline? I replaced this section of the install_esoreflex script:
+How did I modify the install_esoreflex to not prompt for which pipelines to install and just install the MUSE pipeline? I asked chatgpt... and it told me to replace this section of the install_esoreflex script:
 
 ``` {.bash style="color"}
 GetPipelinesToInstall()
@@ -69,7 +84,7 @@ GetPipelinesToInstall()
 {
   cd "${tempdir}"
   echo ==================================================================
-  echo "File edited by tansb! Automatically selected MUSE pipeline for install"
+  echo "File edited by tans! Automatically selected MUSE pipeline for install"
   echo ==================================================================
 
   # Clear existing pipelines_to_install file
@@ -91,9 +106,9 @@ GetPipelinesToInstall()
 }
 ```
 
-I have put this here in case you want to do it for another pipeline in the future. You should just be able to change the number 16 in line 93:
+I have put this here in case you want to do it for another pipeline in the future. You should just be able to change the 16 in line 93:
 
-```awk '{if (NR == 16) printf("%s %s\n", $1, $2)}'```
+`awk '{if (NR == 16) printf("%s %s\n", $1, $2)}'`
 
 to the number corresponding to the pipeline you want to install. NOTE this hasn't been tested, because different pipelines have different dependencies, so you will likely need to slightly modify the Dockerfile as well
 
